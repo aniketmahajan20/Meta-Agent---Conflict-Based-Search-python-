@@ -83,7 +83,6 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-
     result_file = open("results.csv", "w", buffering=1)
 
     for file in sorted(glob.glob(args.instance)):
@@ -93,8 +92,8 @@ if __name__ == '__main__':
         # breakpoint()
         print_mapf_instance(my_map, starts, goals)
 
-        if args.solver == "CBS":
-            print("***Run CBS***")
+        if args.solver == "MACBS":
+            print("***Run MACBS***")
             macbs = MACBSSolver(my_map, starts, goals)
             nodes_generated, nodes_expanded, paths = macbs.find_solution(args.disjoint)
             num_of_agents = len(paths)
@@ -112,12 +111,11 @@ if __name__ == '__main__':
         cost = get_sum_of_cost(paths)
         result_file.write("{},{},{}\n".format(num_of_agents, nodes_generated, nodes_expanded))
         print(paths)
-
-
         if not args.batch:
             print("***Test paths on a simulation***")
             animation = Animation(my_map, starts, goals, paths)
             # animation.save("output.mp4", 1.0)
+            # breakpoint()
             animation.show()
     print("--- %s seconds ---" % (time.time() - start_time))
     result_file.close()
